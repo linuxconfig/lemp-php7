@@ -18,7 +18,7 @@ ADD default /etc/nginx/sites-available/
 ADD php-fcgi /usr/local/sbin/
 RUN chmod o+x /usr/local/sbin/php-fcgi
 
-# Daemonize php-fpm
+# Send php-fpm to foreground
 RUN sed -i '2 i\daemonize = no' /usr/local/php*/etc/php-fpm.conf
 
 # Supervisor configuration files
@@ -33,6 +33,10 @@ RUN service mysql start; mysql -u root -e "CREATE USER 'admin'@'%' IDENTIFIED BY
 
 # MySQL configuration
 RUN sed -i 's/bind-address/#bind-address/' /etc/mysql/my.cnf
+
+# Clean Up
+RUN rm -fr /compile-php-debian
+RUN apt-get clean
 
 EXPOSE 80 3306
 
